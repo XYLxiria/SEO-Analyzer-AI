@@ -1,0 +1,84 @@
+Changelog :
+
+Aplikasi Check SEO Berdasarkan Keyword Sederhana (v0 - file hilang):
+	1. Mulai Memakai tkinter
+	2. Menambahkan 1 kotak window baru untuk melihat daftar keyword yang sering digunakan
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.1 :
+	1. GUI mulai memakai PyQT versi 5
+	2. Menambahkan 1 tombol baru
+	3. Sekarang pengguna bisa melihat grafik untuk melihat analisa keywords
+	4. Menambahkan beberapa title pada kotak sebagai penjelasan
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.1,1 :
+	1. Menambahkan 1 kotak baru untuk analisa alt pada tag gambar
+	2. Memperbarui ukuran kotak secara dinamis
+	3. Memperbaiki beberapa bug kecil
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.2.1 :
+	1. Menambahkan 1 kotak baru untuk menempatkan alamat dan judul kotak.
+	2. Menambahkan beberapa keterangan pada setiap kotak
+	3. Menambahkan 1 tombol baru untuk digunakan nanti (masih di sembunyikan)
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.2.2 :
+	1. Menambahkan respon error ketika mengetik tidak sesuai
+	2. Menambahkan animasi tunggu sederhana
+	3. Memperbaiki beberapa bug kecil
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.2.3 :
+	1. Menambahkan tombol kembali pada grafik hasil analisa
+	2. Memberi warna khusus pada kotak analisa alt tag
+	3. Memperbaiki bug dan perhitungan visual kotak pada beberapa kejadian
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.2.4 :
+	1. Menghapus warna pada kotak ke analisa alt tag
+	2. Menghapus tombol kembali pada grafik hasil analisa, digantikan dengan taskbar dari PyQT5
+	3. Memperbaiki beberapa bug kecil
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.3.1 :
+	1. Menambahkan pustaka spacy untuk mendeteksi keyword diluar pustaka NLTK
+	2. Menggunakan fungsi tombol pada versi 0.2 untuk hasil analisa spesifik dengan pustaka Spacy
+	3. Menambahkan grafik baru untuk menampung hasil analisa pustaka Spacy
+	4. Menambah fitur penyimpanan analisa sebagai PDF
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.3.2 :
+	1. Memperbaiki bug visual sumbu X horizontal pada hasil analisa spesifik
+	2. Memperbaiki bug visual grafik hasil analisa pada tombol pertama
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.4.1 :
+	1. Mengatur jumlah keyword pada grafik tombol pertama "Tampilkan grafik analisa" dengan jumlah maksimal 30 kata
+	2. Mengatur jumlah keyword pada grafik tombol pertama "Tampilkan analisa spesifik" dengan jumlah maksimal 20 kata
+	3. Memperbaiki beberapa bug kecil
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.4.2 :
+	1. Menambah respon timeout ketika web tidak bisa dianalisa.
+	2. Memperbaiki beberapa bug kecil
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.4.2.1 :
+	1. Memperbaiki bug visual pada hasil PDF
+	2. Menambah fungsi pemilihan direktori saat menyimpan PDF
+	3. Menambahkan beberapa regex untuk kestabilan format PDF
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.5.1 :
+	1. Memperbaiki penempatan hasil kotak analisa
+	2. Memperbaiki bar loading dan menambahkan text proses
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.6.1 :
+	1. Menghapus fitur dan pustaka spaCy terkait hasil analisa
+	2. Menambahkan beberapa error handling
+	3. Menambahkan Icon pada GUI
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v6.2 :
+	1. Menstabilkan hasil analisa
+	2. Menambah beberapa visual dan memperbaiki visual
+	3. Mengubah beberapa fungsi
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.6.3 :
+	1. Menambah menu bar
+	2. Memberi sedikit detail pada menu bar
+
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.6.4 :
+	1. Menambah metode caching untuk keringanan sumber daya yang digunakan
+	2. Memperbaiki bug pada eror handling
+	3. Pembuatan Installer ke-2
+
