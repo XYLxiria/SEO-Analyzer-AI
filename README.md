@@ -1,15 +1,26 @@
 # SEO-Analyzer-AI
-This is application made to complete degree at Faculty Engineering - Wiralodra University. The exact name still on thought, and maybe on future this application still update (I'm still learn about updater)
 
-The code is still in-line based, the developer is still new to python and github, please feel free if you want to request or improve as a contributor, any advice to do so.
+This application is based on python 3.12, the purpose of this application is to map several visuals containing the results of scaping using a request parser and beautifulsoup4, assisted by pyQt5 as the main GUI, and AI to filter words / keywords that have been parsed. 
 
-This application uses several main libraries on python 3.12, such as:
+The code is still in-line based, I'm still new to using python and github, please if you want to request or improve as a contributor, suggestion can do so.
+
+This is an application created to complete studies at the Faculty of Engineering - Wiralodra University. The exact name is still in the thinking stage, and maybe in the future this application will still be updated (I'm still learning about updaters in python).
+
+This application uses some of the main libraries in python 3.12, such as:
 
 1. nltk (punkt and stopwords)
-2. spaCy (deleted on v2 alpha)
-3. reportlab
-4. pyQt5 as main GUI
-5. matplotlib
-6. skicit-learn
+2. spaCy (removed in v2 alpha - see release)
+3. Beautifulsoup4
+4. requests
+5. reportlab
+6. pyQt5 as main GUI
+7. matplotlib
+8. skicit-learn
 
-Please see changelog.txt in English or Indonesian, it may not be very complete because pulls are made simultaneously (developers only save and always debugging in local mode). Feel free to use because the code and release are based on MIT License..
+Please see changelog.txt in English or Indonesian, it may not be very complete as the pulls were done simultaneously (the developers only save and always debug in local mode). Feel free to use as the code and releases are under the MIT License.
+
+If you want to straight to app release, you can download from link below here :
+
+[Download V1 Alpha](https://github.com/XYLxiria/SEO-Analyzer-AI/releases/download/publish/SEOAnalyzerInstaller.exe) for Alpha release (Based .py files from 01-05)
+
+[Download V1 Beta](https://github.com/XYLxiria/SEO-Analyzer-AI/releases/download/lastestpublish/SEOAnalyzerInstallerV2.0.exe) for Beta release (Based .py files from 06)
