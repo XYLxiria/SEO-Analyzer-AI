@@ -17,6 +17,8 @@ WizardImageFile=Z:\SKRIPSI\SEOChecker\Assets\installer_image.bmp
 WizardSmallImageFile=Z:\SKRIPSI\SEOChecker\Assets\installer_small_image.bmp
 SetupIconFile=Z:\SKRIPSI\SEOChecker\Assets\favicon.ico
 LicenseFile=Z:\SKRIPSI\SEOChecker\Assets\license.txt
+PrivilegesRequired=admin
+
 
 [Files]
 ; Aplikasi utama dan dependensi
