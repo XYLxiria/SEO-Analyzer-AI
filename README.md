@@ -4,7 +4,7 @@ This application is based on python 3.12, the purpose of this application is to 
 
 The code is still in-line based, I'm still new to using python and github, feel free if you want to request or improve as a contributor, suggestion can do so.
 
-This is an application created to complete studies at the Faculty of Engineering - Wiralodra University. The exact name is still in the thinking stage, and maybe in the future this application will still be updated (I'm still learning about updaters in python).
+This is an application created to complete studies at the Faculty of Engineering - Wiralodra University. The exact build still developing for future, and maybe in the future this application will maintainly updated (I'm still learning about updater in python).
 
 This application uses some of the main libraries in python 3.12, such as:
 
@@ -16,6 +16,11 @@ This application uses some of the main libraries in python 3.12, such as:
 6. pyQt5 as main GUI
 7. matplotlib
 8. skicit-learn
+
+*Note if you do research for this code :*
+>- Refer the nltkdownload.py for manually or make choice of yours for directory that nltk placed later
+>- You must change the line of directory on main.py (whatever version) to directories of yours, it will provide the AI from local
+>- If you want still use spaCy, then you can install it, but the main source I use en-core-web-sm
 
 Please see changelog.txt in English or Indonesian, it may not be very complete as the pulls were done simultaneously (the developers only save and always debug in local mode). Feel free to use as the code and releases are under the MIT License.
 
