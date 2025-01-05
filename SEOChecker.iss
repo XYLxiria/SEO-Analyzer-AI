@@ -1,4 +1,4 @@
-; MySetupScript.iss
+; testingproduction.iss
 [Setup]
 AppName=AnalisaSEO
 AppVersion=3.0
