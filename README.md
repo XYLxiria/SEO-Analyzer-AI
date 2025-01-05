@@ -22,7 +22,7 @@ This application uses some of the main libraries in python 3.12, such as:
 >- You must change the line of directory on main.py (whatever version) to directories of yours, it will provide the AI from local
 >- If you want still use spaCy, then you can install it, but the main source I use en-core-web-sm
 
-Please see changelog.txt in English or Indonesian, it may not be very complete as the pulls were done simultaneously (the developers only save and always debug in local mode). Feel free to use as the code and releases are under the MIT License.
+Please see changelog.txt in English or Indonesian, it may not be very complete as the pulls were done simultaneously (I only save and always debug in local mode). Feel free to use as the code releases under the MIT License.
 
 If you want to straight to app release, you can download from link below here :
 
