@@ -82,3 +82,6 @@ Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.6.4 :
 	2. Memperbaiki bug pada eror handling
 	3. Pembuatan Installer ke-2
 
+Aplikasi Check SEO Berdasarkan Keyword - TestProduction v.6.5 :
+	1. Set installer ke mode administrator (Cek .iss file)
+	2. Menambahkan menu bar baru
