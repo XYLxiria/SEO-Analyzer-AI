@@ -9,7 +9,7 @@ This is an application created to complete studies at the Faculty of Engineering
 This application uses some of the main libraries in python 3.12, such as:
 
 1. nltk (punkt and stopwords)
-2. spaCy (removed in v2 alpha - see release)
+2. spaCy (removed in v3beta - see release)
 3. Beautifulsoup4
 4. requests
 5. reportlab
