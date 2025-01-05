@@ -2,7 +2,7 @@
 
 This application is based on python 3.12, the purpose of this application is to map several visuals containing the results of scaping using a request parser and beautifulsoup4, assisted by pyQt5 as the main GUI, and AI to filter words / keywords that have been parsed. 
 
-The code is still in-line based, I'm still new to using python and github, please if you want to request or improve as a contributor, suggestion can do so.
+The code is still in-line based, I'm still new to using python and github, feel free if you want to request or improve as a contributor, suggestion can do so.
 
 This is an application created to complete studies at the Faculty of Engineering - Wiralodra University. The exact name is still in the thinking stage, and maybe in the future this application will still be updated (I'm still learning about updaters in python).
 
