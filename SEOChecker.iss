@@ -42,4 +42,4 @@ Name: "{userdesktop}\AnalisisSEO"; Filename: "{app}\AnalisaSEO.exe"; IconFilenam
 Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional icons:"; Flags: unchecked
 
 [Run]
-Filename: "{app}\AnalisaSEO.exe"; Description: "{cm:LaunchProgram,AnalisisSEOSkripsi}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\AnalisaSEO.exe"; Description: "{cm:LaunchProgram,AnalisisSEOSkripsi}"; Flags: nowait postinstall skipifsilent runasoriginaluser
