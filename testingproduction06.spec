@@ -32,11 +32,11 @@ exe = EXE(
     name='AnalisaSEO',
     debug=False,
     bootloader_ignore_signals=False,
-    strip=False,
-    upx=True,
+    strip=True,
+    upx=False,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,
+    console=False,
     icon='Z:\\SKRIPSI\\SEOChecker\\Assets\\favicon.ico'
 )
 
@@ -46,7 +46,7 @@ coll = COLLECT(
     a.zipfiles,
     a.datas,
     strip=False,
-    upx=True,
+    upx=False,
     upx_exclude=[],
     name='AnalisaSEO',
 )
