@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import nltk
 from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import CountVectorizer
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
@@ -16,6 +17,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle, HRFlowable
 from reportlab.lib.units import inch
 from collections import Counter
+import numpy as np
 import re
 import pickle
 import os
@@ -34,18 +36,23 @@ nltk.data.path.append('Z:\\SKRIPSI\\SEOChecker\\nltk_data')
 stop_words = set(stopwords.words('english')).union(set(stopwords.words('indonesian')))
 
 class AnalysisThread(QThread):
-    analysis_complete = pyqtSignal(str, list, list, list, list, bytes, int, dict)
+    analysis_complete = pyqtSignal(str, list, list, list, list, bytes, int, int, dict)
 
     def __init__(self, url):
         super(AnalysisThread, self).__init__()
         self.url = url
+        self._is_running = True
 
     def run(self):
+        if not self._is_running:
+            return
         good = []
         bad = []
         title_message = ""
         description_message = ""
         image_count = 0
+        image_without_alt_count = 0
+
         additional_analysis = {}
         
         try:
@@ -55,8 +62,9 @@ class AnalysisThread(QThread):
             self.analysis_complete.emit("Error: Permintaan waktu habis (timeout). Silakan coba lagi.", [], [], [], [], b'', [], 0, {})
             return
         except requests.exceptions.RequestException as e:
-            self.analysis_complete.emit(f"Error: {str(e)}", [], [], [], [], b'', 0, {})
+            self.analysis_complete.emit(f"Error: {str(e)}", [], [], [], [], b'', 0, 0, {})
             return
+
 
         if response.status_code != 200:
             self.analysis_complete.emit("Error: Tidak bisa mengakses website untuk analisa.", [], [], [], [], b'', [], 0, {})
@@ -65,6 +73,11 @@ class AnalysisThread(QThread):
         soup = BeautifulSoup(response.content, 'html.parser')
         title = soup.find('title').get_text() if soup.find('title') else None
         description = soup.find('meta', attrs={'name': 'description'})['content'] if soup.find('meta', attrs={'name': 'description'}) else None
+        
+        if not soup.body or len(soup.body.text.strip()) == 0:
+            self.analysis_complete.emit("Error: Halaman kosong atau tidak memiliki konten untuk dianalisis.", [], [], [], [], b'', 0, 0, {})  # Tambahkan 0 untuk image_without_alt_count
+            return
+
 
         if title:
             title_message = f"{title}"
@@ -87,8 +100,10 @@ class AnalysisThread(QThread):
 
         for img in soup.find_all('img'):
             image_count += 1
-            if not img.get('alt'):
+            if not img.has_attr('alt') or not img.get('alt') or img.get('alt').strip() == "":
+                image_without_alt_count += 1
                 bad.append(f"Image tanpa alt: {img}")
+
 
         additional_analysis['heading_tags'] = {tag: h_tags.count(tag) for tag in hs}
         additional_analysis['meta_description_length'] = len(description) if description else 0
@@ -104,8 +119,14 @@ class AnalysisThread(QThread):
             bad,
             additional_chart_data,
             image_count,
+            image_without_alt_count,
             additional_analysis
         )
+
+    def stop(self):
+        self._is_running = False
+        self.quit()
+        self.wait()
 
     def extract_keywords(self, soup):
         paragraphs = soup.find_all('p')
@@ -124,7 +145,7 @@ class AnalysisThread(QThread):
             word_frequencies = vectorizer.fit_transform([text_content])
             if word_frequencies.shape[1] == 0:
                 raise ValueError("Vocabulary kosong, mungkin semua kata hanya berupa sesuatu yang tidak spesifik")
-            
+
             feature_names = vectorizer.get_feature_names_out()
             total_word_frequencies = word_frequencies.sum(axis=0).A1
             word_freq_pairs = list(zip(feature_names, total_word_frequencies))
@@ -138,11 +159,17 @@ class AnalysisThread(QThread):
         width = int(screen_size.width() * 0.75)
         height = int(screen_size.height() * 0.75)
         plt.figure(figsize=(width / 100, height / 100))
-        plt.bar(top_words, top_frequencies)
+        bars = plt.bar(top_words, top_frequencies, color="royalblue")
+        for bar in bars:
+            yval = bar.get_height()  # Ambil tinggi batang
+            plt.text(bar.get_x() + bar.get_width()/2, yval + 0.5, str(int(yval)), 
+                 ha='center', fontsize=10, fontweight='bold', color='black')
+
         plt.xticks(rotation='vertical')
         plt.xlabel('Kata Kunci')
         plt.ylabel('Frekuensi Kata Kunci')
         plt.title('Kata Kunci Terbanyak Dalam Website (Top 30)')
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
         plt.tight_layout()
 
         chart_image_bytes = BytesIO()
@@ -154,7 +181,7 @@ class AnalysisThread(QThread):
 class SEOAnalyzerApp(QMainWindow):
     def __init__(self):
         super(SEOAnalyzerApp, self).__init__()
-        self.setWindowIcon(QIcon('icon.png'))
+        self.setWindowIcon(QIcon('Assets\\icon.png'))
         self.history = []
         self.init_ui()
 
@@ -249,6 +276,15 @@ class SEOAnalyzerApp(QMainWindow):
         feature_action.triggered.connect(self.show_feature)
         about_menu.addAction(feature_action)
 
+        guide_menu = menubar.addMenu('Bantuan')
+        error_action = QAction('Masalah Eror', self)
+        error_action.triggered.connect(self.show_error_dialog)
+        guide_menu.addAction(error_action)
+        helpanalysis_action = QAction('Bantuan Analisa', self)
+        helpanalysis_action.triggered.connect(self.show_help_analysis)
+        guide_menu.addAction(helpanalysis_action)
+
+
     def show_history(self):
         if not self.history:
             self.show_message("Tidak ada riwayat ditemukan.") 
@@ -263,22 +299,47 @@ class SEOAnalyzerApp(QMainWindow):
     
     def show_about_dialog(self):
         about_text = (
-    "Aplikasi ini dibuat oleh Isvandika Adisana untuk kebutuhan skripsi\n\n"
-    "Aplikasi ini dapat digunakan untuk menganalisis SEO dari sebuah website. "
+    "Aplikasi ini dibuat oleh Isvandika Adisana untuk kebutuhan skripsi\n"
+    "Aplikasi ini dapat digunakan untuk menganalisis SEO dari sebuah website.\n"
     "Aplikasi ini menggunakan Python, PyQt5, BeautifulSoup, NLTK, dan Matplotlib.\n\n"
-    "Anda menggunakan versi 2.0\n"
+    "Anda menggunakan versi 3.0\n"
     "Aplikasi ini berada di bawah lisensi MIT-License"
-)
+        )
         self.show_message(about_text)
     
     def show_feature(self):
-        about_text = (
-    "Anda bisa menggunakan tombol ESC untuk minimalkan jendela\n\n"
-    "Anda bisa menekan tombol Enter atau Return untuk memulai analisis\n\n"
-    "Anda juga bisa menyimpan hasil analisa sebagai PDF\n\n"
+        feature_text = (
+    "1. Anda bisa menggunakan tombol ESC untuk minimalkan jendela\n"
+    "2. Anda bisa menekan tombol Enter atau Return untuk memulai analisis langsung\n"
+    "3. Anda juga bisa menyimpan hasil analisa sebagai PDF\n\n"
     "Untuk fitur lebih lanjut, akan selalu di-update untuk kedepannya"
-)
-        self.show_message(about_text)
+        )
+        self.show_message(feature_text)
+
+    def show_error_dialog(self):
+        error_text = (
+    "Kenapa Error bisa terjadi saat menganalisa website?\n\n"
+    "1. Website tujuan tidak bisa diakses (Akses ditolak)\n"
+    "2. Website tujuan tidak ditemukan (404 Not Found)\n"
+    "3. Website tujuan tidak merespon (Timeout)\n"
+    "4. Anda tidak terhubung ke internet\n"
+    "5. Alamat URL yang dimasukkan tidak valid / salah (Typo)\n"
+        )
+        self.show_message(error_text)
+    
+    def show_help_analysis(self):
+        help_text = (
+    "Apa yang bisa dianalisa dari aplikasi ini?\n\n"
+    "1. Judul dan Deskripsi Website\n"
+    "2. Kata Kunci yang sering digunakan\n"
+    "3. Heading Tags yang digunakan\n"
+    "4. Jumlah header yang terdapat pada website\n"
+    "5. Jumlah gambar yang terdapat pada website\n"
+    "6. Gambar yang tidak memiliki alt tag (Perlu perbaikan)\n"
+    "7. Analisa Diagram (Top 30 Kata Kunci yang sering digunakan)\n"
+    "8. Simpan hasil analisa sebagai PDF untuk laporan Anda\n"
+        )
+        self.show_message(help_text)
     
     def show_message(self, message):
         msg = QMessageBox()
@@ -314,20 +375,35 @@ class SEOAnalyzerApp(QMainWindow):
         self.timer.start(10000)
 
     def on_timeout(self):
-        if self.analysis_thread.isRunning():
-            self.analysis_thread.terminate() 
-            self.display_results("Error: Analisis waktu habis. Silakan coba lagi.", [], [], [], [], b'', [], 0, {})
+        if self.analysis_thread and self.analysis_thread.isRunning():
+            self.analysis_thread.quit()
+            self.analysis_thread.wait()
+
+        if hasattr(self, "status_label"):
+            self.status_label.setText("Analysis timed out.")
+        else:
+            print("Timeout occurred, but no status label available.")
 
     def add_horizontal_line(self, widget):
+        if not widget:
+            print("Error: Widget reference is None.")
+            return
+
         width = widget.viewport().width()
         font_metrics = widget.fontMetrics()
-        char_width = font_metrics.horizontalAdvance('-')
-        num_chars = width // char_width
-        if num_chars > 0:
-            num_chars -= 3
-        widget.appendPlainText("\n" + "-" * num_chars + "\n")
 
-    def display_results(self, message, title_description, keywords, good, bad, chart_image_bytes, image_count, additional_analysis, num_results=0, extra_info={}):
+        if font_metrics:
+            char_width = font_metrics.horizontalAdvance('-')
+            num_chars = max(10, width // char_width - 3)
+        else:
+            print("Warning: Font metrics not available, using default length.")
+            num_chars = 50
+
+        widget.appendPlainText("\n" + "-" * num_chars + "\n")
+        print(f"Horizontal line added with {num_chars} dashes.")
+
+
+    def display_results(self, message, title_description, keywords, good, bad, chart_image_bytes, image_count, image_without_alt_count, additional_analysis, num_results=0, extra_info={}):
         self.first_analysis_box.clear()
         self.first_analysis_box.appendPlainText(message)
         if title_description:
@@ -377,11 +453,16 @@ class SEOAnalyzerApp(QMainWindow):
         self.add_horizontal_line(self.third_analysis_box)
 
         self.third_analysis_box.appendPlainText(f"Total jumlah gambar yang terdeteksi pada laman ini : {image_count}\n")
+        self.third_analysis_box.appendPlainText(f"Total jumlah gambar yang terdeteksi tidak ada alt text pada gambar : {image_without_alt_count}\n")
         self.third_analysis_box.appendPlainText("Perbaikan pada tag 'Alt' gambar yang diperlukan:\n")
-        for item in bad:
-            img_src = re.search(r'src="([^"]+)"', item)
-            img_link = img_src.group(1) if img_src else "Tidak ditemukan"
-            self.third_analysis_box.appendPlainText(f"- Image tanpa alt pada link = \"{img_link}\" ")
+        if bad:
+            for item in bad:
+                img_src = re.search(r'src="([^"]+)"', item)
+                if img_src:
+                    img_link = img_src.group(1)
+                    self.third_analysis_box.appendPlainText(f"- Image tanpa alt pada link = \"{img_link}\" ")
+        else:
+            self.third_analysis_box.appendPlainText("- Semua gambar sudah memiliki alt text.")
 
         self.third_analysis_box.moveCursor(QTextCursor.Start)
 
