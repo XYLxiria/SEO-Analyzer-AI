@@ -30,6 +30,8 @@ If you want to straight to app release, you can download from link below here :
 
 [Download V3 Beta](https://github.com/XYLxiria/SEO-Analyzer-AI/releases/download/lastestpublish/SEOAnalyzerInstallerV3-beta.exe) for Beta release (Based .py files from 06)
 
+[Download V1 Final](https://github.com/XYLxiria/SEO-Analyzer-AI/releases/download/publishfinal/SEOAnalyzerInstallerV1Final.exe) for Final release (Based lastest .py file from 06)
+
 *Error note from the installer :*
 >- Error 225 : Turn off the Antivirus, this app not digital trusted by windows, dev brokes /yea
 >- Error 740 : Run as Administrator, but it's have been fixed (check the .iss file)
