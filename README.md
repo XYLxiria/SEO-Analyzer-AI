@@ -16,6 +16,7 @@ This application uses some of the main libraries in python 3.12, such as:
 6. pyQt5 as main GUI
 7. matplotlib
 8. skicit-learn
+9. numpy
 
 *Note if you do research for this code :*
 >- Refer the nltkdownload.py for manually or make choice of yours for directory that nltk placed later
